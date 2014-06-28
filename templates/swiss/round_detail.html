@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script>
+
+</script>
+<script>
+function set_result(winner, matchup_pk) {
+	url = "/swiss/matchup/" + matchup_pk + "/" + winner + "/"
+
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", url, true);
+	xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+        	var result = JSON.parse(xmlhttp.responseText);
+
+        	document.getElementById("res_matchup_" + result.matchup).innerHTML = result.result; 
+        	document.getElementById("actions_matchup_" + result.matchup).style.display = 'none';
+        	if (result.can_start_next_round) {
+        		document.getElementById("start_next").style.display = 'block';
+        	}
+        	if (result.is_all_games_played){
+        		document.getElementById("see_result").style.display = 'block';
+        	}
+    	}
+    }
+	xmlhttp.send();
+}
+</script>
+{% endblock %}
+
+{% block content %}
+	<h2> {{ object }} of {{ object.tournament.number_of_rounds }} </h2> 
+
+	<small> <strong> {{ object.nonplayer }} </strong> getting score without match </small>
+
+	<div id="start_next" style="display: none;">
+		<h2> <a href={% url 'start_next_round' object.tournament.id %}> start next round </a> </h2>
+	</div>
+
+	<div id="see_result" style="display: none;">
+		<h2> <a href={% url 'tournament' object.tournament.id %}> see tournament result </a> </h2>
+	</div>
+	{% if object.is_finished %}
+		{% if object.is_latest %}
+			<h2> <a href={% url 'tournament' object.tournament.id %}> see tournament result </a> </h2>
+		{% else %}
+			{% if next_round %}
+				<h2> <a href={% url 'round' object.tournament.id %}> see next round </a> </h2>
+			{% else %}
+				<h2> <a href={% url 'start_next_round' object.tournament.id %}> start next round </a> </h2>
+			{% endif %}
+		{% endif %}
+	{% endif %}
+	
+
+	{% for group in groups %}
+		{% if group.matchup_set.all %}
+			<div class="panel panel-default">
+  				<div class="panel-body">
+				{% include "swiss/_group_summary.html" with group=group %}
+
+				{% include "swiss/_group_matchups.html" with group=group %}
+				</div>
+			</div>
+		{% endif %}
+	{% endfor %}
+{% endblock %}

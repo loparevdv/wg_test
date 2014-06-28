@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="width:500px; margin:0 auto;">
+<form method="POST" enctype="multipart/form-data" class="navbar-form">{% csrf_token %}
+	<fieldset>
+
+		<div class="control-group">
+			<label>{{ form.name.label }}</label>
+			<div class="controls">
+				{{ form.name }}
+				{{ form.name.errors }}
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label>{{form.elo.label}}</label>
+			<div class="controls">
+				{{ form.elo }}
+				{{ form.elo.errors }}
+			</div>
+		</div>
+
+		<div class="control-group">
+			<button type="submit" class="btn"> Submit </button>
+		</div>
+	</fieldset>
+</form>
+</div>
+{% endblock %}

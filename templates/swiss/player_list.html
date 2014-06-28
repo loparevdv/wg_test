@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table class="table table-striped">
+	<tr>
+		<td>name</td>
+		<td>elo rating</td>
+	</tr>
+	{% for object in object_list %}
+		<tr>
+			<td> <a href="{{ object.get_absolute_url }}"> {{ object.name }} </a>  </td>
+			<td> {{ object.elo }} </td>
+		</tr>
+	{% endfor %}
+</table>
+
+{% endblock %}

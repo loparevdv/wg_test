@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script>
+function update_elos(tournament_id) {
+	url = "http://localhost:8080/swiss/final_calcs/" + tournament_id + "/";
+	
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", url, true);
+	xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+        	var result = JSON.parse(xmlhttp.responseText);
+        	for (key in result){
+        		document.getElementById("final_elo_"+key).innerHTML = result[key][0];
+        		document.getElementById("buchholz_factor_"+key).innerHTML = result[key][1];
+        	}
+
+        	document.getElementById("update_button").style.display = 'none';
+    	}
+    }
+	xmlhttp.send();
+}
+</script>
+{% endblock %}
+
+{% block content %}
+	<h2> {{ object }} {% if tournament.is_finished %} FINISHED {% endif %} </h2>
+	<small>
+	<ul class="list-inline">
+		<li	> {{ object.number_of_winners }}  - winners </li>
+		<li> {{ object.number_of_rounds }} - round </li> 
+	</ul>
+	</small>
+
+	{% if tournament.can_update_players_elos %} 
+		<div id="update_button" onClick="update_elos({{object.id}});">
+			<input type=button onClick="update_elos({{object.id}});" value="get elos" title="get elos" class=btn>
+		</div>
+	{% endif %}
+
+	<table class="table table-striped">
+		<tr>
+			<td> Rank </td>
+			<td> Name </td>
+			<td> Elo </td>
+			<td> final elo </td>
+			<td> Score </td>
+			<td> Buchholtz </td>
+		</tr>
+		{% for ranked_player in object.get_ranked_players %}	
+			<tr>
+				<td>{{ ranked_player.rank }}</td>
+				<td>{{ ranked_player.player.name }}</td>
+				<td>{{ ranked_player.starting_elo }}</td>
+				<td>
+					<div id="final_elo_{{ ranked_player.id }}">
+						{{ ranked_player.final_elo }}
+					</div>
+				</td>
+				<td>{{ ranked_player.score }}</td>
+				<td>
+					<div id="buchholz_factor_{{ ranked_player.id }}"> 
+						{{ ranked_player.buchholz_factor }}
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+	
+	<h3>rounds</h3>
+	<ul class="list-inline">
+	{% for tournament_round in object.round_set.all %}
+		<li> <a href="{{ tournament_round.get_absolute_url }}"> {{ tournament_round }}</a>, </li>
+	{% endfor %}
+	</ul>
+{% endblock %}

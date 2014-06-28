@@ -1,0 +1,27 @@
+<table class="table table-striped">
+  <td> black </td>
+  <td> white </td>
+  <td> winner </td>
+  <td> commands </td>
+  
+  {% for matchup in group.get_matchups %}
+    <tr>
+      <td> {{ matchup.black }} </td>
+      <td> {{ matchup.white }} </td>
+      <td> 
+        <div id="res_matchup_{{matchup.id}}">
+          {{ matchup.get_winner }} 
+        </div>
+      </td>
+      <td>
+        {% if matchup.is_not_played %}
+          <div id="actions_matchup_{{matchup.id}}">
+            <input type=button onClick="set_result('black', {{matchup.pk}});" value="black" title="black" class=btn>
+            <input type=button onClick="set_result('white', {{matchup.pk}});" value="white" title="white" class=btn>
+            <input type=button onClick="set_result('draw', {{matchup.pk}});" value="draw" title="draw" class=btn>
+          </div>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+</table>

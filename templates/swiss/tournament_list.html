@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table class="table table-striped">
+	<tr>
+		<td>Tournament</td>
+		<td>Number of winners</td>
+		<td>Number of rounds</td>
+		<td>Finished?</td>
+	</tr>
+	{% for object in object_list %}
+	<tr>
+		<td> <a href="{{ object.get_absolute_url }}"> {{ object }} </a> </td>
+		<td> {{ object.number_of_winners }} </td>
+		<td> {{ object.number_of_rounds }} </td>
+		<td> {{ object.is_finished }} </td>
+	</td>
+	{% endfor %}
+</table>
+
+{% endblock %}

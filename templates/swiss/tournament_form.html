@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="width:500px; margin:0 auto;">
+	<form method="POST" enctype="multipart/form-data"  class="navbar-form">{% csrf_token %}
+		<fieldset>
+
+			<div class="control-group">
+				
+				<div class="controls">
+					<label>{{ form.number_of_winners.label }}</label>
+					<input id="id_number_of_winners" min="0" name="number_of_winners" type="text" value="1">
+					{{ form.number_of_winners.errors }}
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label>select players</label>
+				{{ form.ranked_players }}
+				{{ form.ranked_players.errors }}		
+			</div>
+
+			<div class="control-group">
+				<button type="submit" class="btn"> Submit </button>
+			</div>
+		</fieldset>
+	</form>
+</div>
+{% endblock %}
