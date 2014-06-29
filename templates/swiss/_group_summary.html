@@ -1,12 +1,12 @@
 <h4> {{ group.score_value }}-score group with {{ group.lot_set.all.count }} players </h4>
 <small>
 	<ul class="list-inline">
-		{% for player in group.get_lots %}
+		{% for lot in group.get_lots %}
 			<li>
-				{% if player.is_shifted %}
-					<b> {{ player.player.name }} </b>
+				{% if lot.is_shifted %}
+					<b> {{ lot.player.player.name }} </b>
 				{% else %}
-					{{ player.player.name }}
+					{{ lot.player.player.name }}
 				{% endif %}
 			</li>
 		{% endfor %}		

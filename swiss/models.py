@@ -8,7 +8,6 @@ SCORE_FOR_WIN = 1.0
 SCORE_FOR_DRAW = 0.5
 SCORE_FOR_NONPLAY = 0.5
 
-
 class Player(models.Model):
     name = models.CharField(max_length=100)
     elo = models.FloatField()
